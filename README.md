@@ -15,7 +15,7 @@
 **Using Composer**
 
 ```
-composer install fyre/message
+composer require fyre/message
 ```
 
 In PHP:

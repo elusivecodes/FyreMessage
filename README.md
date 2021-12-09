@@ -21,7 +21,7 @@ composer require fyre/message
 In PHP:
 
 ```php
-use Fyre\Message\Message;
+use Fyre\Http\Message;
 ```
 
 

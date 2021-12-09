@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Fyre\Message;
+namespace Fyre\Http;
 
 use
-    Fyre\Header\Header,
-    Fyre\Message\Exceptions\MessageException;
+    Fyre\Http\Header,
+    Fyre\Http\Exceptions\MessageException;
 
 use function
     array_key_exists,

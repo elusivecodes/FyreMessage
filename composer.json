@@ -1,6 +1,6 @@
 {
     "name": "fyre/message",
-    "description": "A message library.",
+    "description": "A HTTP message library.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Fyre\\Message\\": "src/"
+            "Fyre\\Http\\": "src/"
         }
     },
     "autoload-dev": {

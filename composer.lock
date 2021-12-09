@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fyre/header",
-            "version": "v1.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreHeader.git",
-                "reference": "c9aca41ef6a3b730f5121f314094524ad148d5b8"
+                "reference": "709a877be2bd224c58055c0892db8f11ebe43ea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreHeader/zipball/c9aca41ef6a3b730f5121f314094524ad148d5b8",
-                "reference": "c9aca41ef6a3b730f5121f314094524ad148d5b8",
+                "url": "https://api.github.com/repos/elusivecodes/FyreHeader/zipball/709a877be2bd224c58055c0892db8f11ebe43ea5",
+                "reference": "709a877be2bd224c58055c0892db8f11ebe43ea5",
                 "shasum": ""
             },
             "require-dev": {
@@ -26,7 +26,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Fyre\\Header\\": "src/"
+                    "Fyre\\Http\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -42,9 +42,9 @@
             "description": "A header library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreHeader/issues",
-                "source": "https://github.com/elusivecodes/FyreHeader/tree/v1.0"
+                "source": "https://github.com/elusivecodes/FyreHeader/tree/v1.0.2"
             },
-            "time": "2021-11-30T09:23:07+00:00"
+            "time": "2021-12-09T11:57:24+00:00"
         }
     ],
     "packages-dev": [
@@ -504,16 +504,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.14.0",
+            "version": "v1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e"
+                "reference": "bbcd7380b0ebf3961ee21409db7b38bc31d69a13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e",
-                "reference": "d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/bbcd7380b0ebf3961ee21409db7b38bc31d69a13",
+                "reference": "bbcd7380b0ebf3961ee21409db7b38bc31d69a13",
                 "shasum": ""
             },
             "require": {
@@ -565,9 +565,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy/issues",
-                "source": "https://github.com/phpspec/prophecy/tree/1.14.0"
+                "source": "https://github.com/phpspec/prophecy/tree/v1.15.0"
             },
-            "time": "2021-09-10T09:02:12+00:00"
+            "time": "2021-12-08T12:19:24+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use
-    Fyre\Header\Header,
-    Fyre\Message\Exceptions\MessageException,
-    Fyre\Message\Message,
+    Fyre\Http\Header,
+    Fyre\Http\Exceptions\MessageException,
+    Fyre\Http\Message,
     PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase

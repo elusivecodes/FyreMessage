@@ -49,10 +49,7 @@ final class MessageTest extends TestCase
 
     public function testAppendHeaderNew(): void
     {
-        $this->assertEquals(
-            $this->message,
-            $this->message->appendHeader('test', 'last')
-        );
+        $this->message->appendHeader('test', 'last');
 
         $this->assertEquals(
             [
@@ -65,11 +62,7 @@ final class MessageTest extends TestCase
     public function testAppendHeaderEmpty(): void
     {
         $this->message->setHeader('test', 'value');
-
-        $this->assertEquals(
-            $this->message,
-            $this->message->appendHeader('test', '')
-        );
+        $this->message->appendHeader('test', '');
 
         $this->assertEquals(
             [
@@ -179,10 +172,7 @@ final class MessageTest extends TestCase
 
     public function testPrependHeaderNew(): void
     {
-        $this->assertEquals(
-            $this->message,
-            $this->message->prependHeader('test', 'first')
-        );
+        $this->message->prependHeader('test', 'first');
 
         $this->assertEquals(
             [
@@ -195,11 +185,7 @@ final class MessageTest extends TestCase
     public function testPrependHeaderEmpty(): void
     {
         $this->message->setHeader('test', 'value');
-
-        $this->assertEquals(
-            $this->message,
-            $this->message->prependHeader('test', '')
-        );
+        $this->message->prependHeader('test', '');
 
         $this->assertEquals(
             [
@@ -267,10 +253,7 @@ final class MessageTest extends TestCase
 
     public function testSetHeaderEmpty(): void
     {
-        $this->assertEquals(
-            $this->message,
-            $this->message->setHeader('test', '')
-        );
+        $this->message->setHeader('test', '');
 
         $this->assertEquals(
             [],

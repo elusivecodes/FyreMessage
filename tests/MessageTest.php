@@ -5,8 +5,8 @@ namespace Tests;
 
 use
     Fyre\Http\Header,
-    Fyre\Http\Exceptions\MessageException,
     Fyre\Http\Message,
+    InvalidArgumentException,
     PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase
@@ -293,7 +293,7 @@ final class MessageTest extends TestCase
 
     public function testSetProtocolVersionInvalid(): void
     {
-        $this->expectException(MessageException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->message->setProtocolVersion('2.1');
     }

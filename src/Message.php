@@ -5,7 +5,7 @@ namespace Fyre\Http;
 
 use
     Fyre\Http\Header,
-    Fyre\Http\Exceptions\MessageException;
+    InvalidArgumentException;
 
 use function
     array_key_exists,
@@ -172,12 +172,12 @@ class Message
      * Set the protocol version.
      * @param string $version The protocol version.
      * @return Message The Message.
-     * @throws MessageException if the protocol version is not valid.
+     * @throws InvalidArgumentException if the protocol version is not valid.
      */
     public function setProtocolVersion(string $version): self
     {
         if (!in_array($version, static::VALID_PROTOCOLS)) {
-            throw MessageException::forInvalidProtocol($version);
+            throw new InvalidArgumentException('Invalid Protocol: '.$version);
         }
 
         $this->protocolVersion = $version;

@@ -281,7 +281,7 @@ final class MessageTest extends TestCase
         $this->message->setProtocolVersion('2.1');
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->message = new Message();
     }

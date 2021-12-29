@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fyre/header",
-            "version": "v1.0.2",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/FyreHeader.git",
-                "reference": "709a877be2bd224c58055c0892db8f11ebe43ea5"
+                "reference": "44315a141a6ac45d0045535a690858c49e3b1fee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyreHeader/zipball/709a877be2bd224c58055c0892db8f11ebe43ea5",
-                "reference": "709a877be2bd224c58055c0892db8f11ebe43ea5",
+                "url": "https://api.github.com/repos/elusivecodes/FyreHeader/zipball/44315a141a6ac45d0045535a690858c49e3b1fee",
+                "reference": "44315a141a6ac45d0045535a690858c49e3b1fee",
                 "shasum": ""
             },
             "require-dev": {
@@ -39,12 +39,12 @@
                     "email": "elusivecodes@gmail.com"
                 }
             ],
-            "description": "A header library.",
+            "description": "A HTTP header library.",
             "support": {
                 "issues": "https://github.com/elusivecodes/FyreHeader/issues",
-                "source": "https://github.com/elusivecodes/FyreHeader/tree/v1.0.2"
+                "source": "https://github.com/elusivecodes/FyreHeader/tree/v1.0.7"
             },
-            "time": "2021-12-09T11:57:24+00:00"
+            "time": "2021-12-29T10:33:43+00:00"
         }
     ],
     "packages-dev": [
@@ -889,16 +889,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.10",
+            "version": "9.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c814a05837f2edb0d1471d6e3f4ab3501ca3899a"
+                "reference": "2406855036db1102126125537adb1406f7242fdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c814a05837f2edb0d1471d6e3f4ab3501ca3899a",
-                "reference": "c814a05837f2edb0d1471d6e3f4ab3501ca3899a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2406855036db1102126125537adb1406f7242fdd",
+                "reference": "2406855036db1102126125537adb1406f7242fdd",
                 "shasum": ""
             },
             "require": {
@@ -976,11 +976,11 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.10"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.11"
             },
             "funding": [
                 {
-                    "url": "https://phpunit.de/donate.html",
+                    "url": "https://phpunit.de/sponsors.html",
                     "type": "custom"
                 },
                 {
@@ -988,7 +988,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-25T07:38:51+00:00"
+            "time": "2021-12-25T07:07:57+00:00"
         },
         {
             "name": "sebastian/cli-parser",

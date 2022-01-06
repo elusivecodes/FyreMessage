@@ -34,7 +34,7 @@ class Message
      * @param string $data The data to append.
      * @return Message The Message.
      */
-    public function appendBody(string $data): self
+    public function appendBody(string $data): static
     {
         $this->body .= $data;
 
@@ -47,7 +47,7 @@ class Message
      * @param string $value The header value.
      * @return Message The Message.
      */
-    public function appendHeader(string $name, string $value): self
+    public function appendHeader(string $name, string $value): static
     {
         $this->headers[$name] ??= new Header($name);
         $this->headers[$name]->appendValue($value);
@@ -122,7 +122,7 @@ class Message
      * @param string $value The header value.
      * @return Message The Message.
      */
-    public function prependHeader(string $name, string $value): self
+    public function prependHeader(string $name, string $value): static
     {
         $this->headers[$name] ??= new Header($name);
         $this->headers[$name]->prependValue($value);
@@ -135,7 +135,7 @@ class Message
      * @param string $name The header name.
      * @return Message The Message.
      */
-    public function removeHeader(string $name): self
+    public function removeHeader(string $name): static
     {
         unset($this->headers[$name]);
 
@@ -147,7 +147,7 @@ class Message
      * @param string $data The message body.
      * @return Message The Message.
      */
-    public function setBody(string $data): self
+    public function setBody(string $data): static
     {
         $this->body = $data;
 
@@ -160,7 +160,7 @@ class Message
      * @param string|array $value The header value.
      * @return Message The Message.
      */
-    public function setHeader(string $name, string|array $value): self
+    public function setHeader(string $name, string|array $value): static
     {
         $this->headers[$name] ??= new Header($name);
         $this->headers[$name]->setValue($value);
@@ -174,7 +174,7 @@ class Message
      * @return Message The Message.
      * @throws InvalidArgumentException if the protocol version is not valid.
      */
-    public function setProtocolVersion(string $version): self
+    public function setProtocolVersion(string $version): static
     {
         if (!in_array($version, static::VALID_PROTOCOLS)) {
             throw new InvalidArgumentException('Invalid Protocol: '.$version);

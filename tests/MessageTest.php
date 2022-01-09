@@ -18,12 +18,12 @@ final class MessageTest extends TestCase
     {
         $this->message->setBody('test');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->appendBody('1')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'test1',
             $this->message->getBody()
         );
@@ -33,12 +33,12 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->appendHeader('test', 'last')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'value',
                 'last'
@@ -51,7 +51,7 @@ final class MessageTest extends TestCase
     {
         $this->message->appendHeader('test', 'last');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'last'
             ],
@@ -64,7 +64,7 @@ final class MessageTest extends TestCase
         $this->message->setHeader('test', 'value');
         $this->message->appendHeader('test', '');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'value'
             ],
@@ -74,7 +74,7 @@ final class MessageTest extends TestCase
 
     public function testGetProtocolVersionDefault(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             '1.1',
             $this->message->getProtocolVersion()
         );
@@ -92,8 +92,7 @@ final class MessageTest extends TestCase
 
     public function testGetHeaderInvalid(): void
     {
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->message->getHeader('invalid')
         );
     }
@@ -103,7 +102,7 @@ final class MessageTest extends TestCase
         $this->message->setHeader('test1', 'value');
         $this->message->setHeader('test2', 'value');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'test1' => $this->message->getHeader('test1'),
                 'test2' => $this->message->getHeader('test2')
@@ -116,7 +115,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
+        $this->assertSame(
             'value',
             $this->message->getHeaderValue('test')
         );
@@ -126,7 +125,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', ['a' => 1, 'b' => 2]);
 
-        $this->assertEquals(
+        $this->assertSame(
             'a=1, b=2',
             $this->message->getHeaderValue('test')
         );
@@ -136,8 +135,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->message->hasHeader('test')
         );
     }
@@ -146,8 +144,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
-            false,
+        $this->assertFalse(
             $this->message->hasHeader('invalid')
         );
     }
@@ -156,12 +153,12 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->prependHeader('test', 'first')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'first',
                 'value'
@@ -174,7 +171,7 @@ final class MessageTest extends TestCase
     {
         $this->message->prependHeader('test', 'first');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'first'
             ],
@@ -187,7 +184,7 @@ final class MessageTest extends TestCase
         $this->message->setHeader('test', 'value');
         $this->message->prependHeader('test', '');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'value'
             ],
@@ -199,25 +196,24 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', 'value');
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->removeHeader('test')
         );
 
-        $this->assertEquals(
-            false,
+        $this->assertFalse(
             $this->message->hasHeader('test')
         );
     }
 
     public function testSetBody(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->setBody('test')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'test',
             $this->message->getBody()
         );
@@ -225,12 +221,12 @@ final class MessageTest extends TestCase
 
     public function testSetHeader(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->setHeader('test', 'value')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'value'
             ],
@@ -242,7 +238,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', ['first', 'last']);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'first',
                 'last'
@@ -255,7 +251,7 @@ final class MessageTest extends TestCase
     {
         $this->message->setHeader('test', '');
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $this->message->getHeader('test')->getValue()
         );
@@ -263,12 +259,12 @@ final class MessageTest extends TestCase
 
     public function testSetProtocolVersion(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             $this->message,
             $this->message->setProtocolVersion('2.0')
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '2.0',
             $this->message->getProtocolVersion()
         );

@@ -46,10 +46,10 @@ $message->appendBody($data);
 
 **Append Header**
 
-Append a value to a message header.
+Append a value to a message [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
-- `$value` is a string representing the header value.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
 $message->appendHeader($name, $value);
@@ -65,9 +65,9 @@ $body = $message->getBody();
 
 **Get Header**
 
-Get a message header.
+Get a message [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 
 ```php
 $header = $message->getHeader($name);
@@ -83,9 +83,9 @@ $headers = $message->getHeaders();
 
 **Get Header Value**
 
-Get a message header value.
+Get a message [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
-- `$name` is a string representing the header name.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 
 ```php
 $value = $message->getHeaderValue($name);
@@ -101,9 +101,9 @@ $version = $message->getProtocolVersion();
 
 **Has Header**
 
-Determine if the message has a header.
+Determine if the message has a [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 
 ```php
 $hasHeader = $message->hasHeader($name);
@@ -111,10 +111,10 @@ $hasHeader = $message->hasHeader($name);
 
 **Prepend Header**
 
-Prepend a value to a message header.
+Prepend a value to a message [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
-- `$value` is a string representing the header value.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
 $message->prependHeader($name, $value);
@@ -122,9 +122,9 @@ $message->prependHeader($name, $value);
 
 **Remove Header**
 
-Remove a header.
+Remove a [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 
 ```php
 $message->removeHeader($name);
@@ -142,10 +142,10 @@ $message->setBody($data);
 
 **Set Header**
 
-Set a message header.
+Set a message [*Header*](https://github.com/elusivecodes/FyreHeader).
 
-- `$name` is a string representing the header name.
-- `$value` is a string representing the header value.
+- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
 $message->setHeader($name, $value);

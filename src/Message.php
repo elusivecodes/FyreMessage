@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace Fyre\Http;
 
-use
-    Fyre\Http\Header,
-    InvalidArgumentException;
+use InvalidArgumentException;
 
-use function
-    array_key_exists,
-    in_array;
+use function array_key_exists;
+use function in_array;
 
 /**
  * Message
@@ -32,27 +29,31 @@ class Message
     /**
      * Append data to the message body.
      * @param string $data The data to append.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function appendBody(string $data): static
     {
-        $this->body .= $data;
+        $temp = clone $this;
 
-        return $this;
+        $temp->body .= $data;
+
+        return $temp;
     }
 
     /**
      * Append a value to a message header.
      * @param string $name The header name.
      * @param string $value The header value.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function appendHeader(string $name, string $value): static
     {
-        $this->headers[$name] ??= new Header($name);
-        $this->headers[$name]->appendValue($value);
+        $temp = clone $this;
 
-        return $this;
+        $header = $temp->headers[$name] ?? new Header($name);
+        $temp->headers[$name] = $header->appendValue($value);
+
+        return $temp;
     }
 
     /**
@@ -120,69 +121,79 @@ class Message
      * Prepend a value to a message header.
      * @param string $name The header name.
      * @param string $value The header value.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function prependHeader(string $name, string $value): static
     {
-        $this->headers[$name] ??= new Header($name);
-        $this->headers[$name]->prependValue($value);
+        $temp = clone $this;
 
-        return $this;
+        $header = $temp->headers[$name] ?? new Header($name);
+        $temp->headers[$name] = $header->prependValue($value);
+
+        return $temp;
     }
 
     /**
      * Remove a header.
      * @param string $name The header name.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function removeHeader(string $name): static
     {
-        unset($this->headers[$name]);
+        $temp = clone $this;
 
-        return $this;
+        unset($temp->headers[$name]);
+
+        return $temp;
     }
 
     /**
      * Set the message body.
      * @param string $data The message body.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function setBody(string $data): static
     {
-        $this->body = $data;
+        $temp = clone $this;
 
-        return $this;
+        $temp->body = $data;
+
+        return $temp;
     }
 
     /**
      * Set a message header.
      * @param string $name The header name.
      * @param string|array $value The header value.
-     * @return Message The Message.
+     * @return Message The new Message.
      */
     public function setHeader(string $name, string|array $value): static
     {
-        $this->headers[$name] ??= new Header($name);
-        $this->headers[$name]->setValue($value);
+        $temp = clone $this;
 
-        return $this;
+        $header = $temp->headers[$name] ?? new Header($name);
+        $temp->headers[$name] = $header->setValue($value);
+
+        return $temp;
     }
 
     /**
      * Set the protocol version.
      * @param string $version The protocol version.
-     * @return Message The Message.
+     * @return Message The new Message.
      * @throws InvalidArgumentException if the protocol version is not valid.
      */
     public function setProtocolVersion(string $version): static
     {
         if (!in_array($version, static::VALID_PROTOCOLS)) {
-            throw new InvalidArgumentException('Invalid Protocol: '.$version);
+            throw new InvalidArgumentException('Invalid protocol version: '.$version);
         }
 
-        $this->protocolVersion = $version;
+        $temp = clone $this;
 
-        return $this;
+        $temp->protocolVersion = $version;
+
+        return $temp;
     }
 
 }

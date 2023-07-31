@@ -1,6 +1,6 @@
 # FyreMessage
 
-**FyreMessage** is a free, HTTP message library for *PHP*.
+**FyreMessage** is a free, open-souce immutable HTTP message library for *PHP*.
 
 
 ## Table Of Contents
@@ -41,7 +41,7 @@ Append data to the message body.
 - `$data` is a string representing the data to append.
 
 ```php
-$message->appendBody($data);
+$newMessage = $message->appendBody($data);
 ```
 
 **Append Header**
@@ -52,7 +52,7 @@ Append a value to a message [*Header*](https://github.com/elusivecodes/FyreHeade
 - `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
-$message->appendHeader($name, $value);
+$newMessage = $message->appendHeader($name, $value);
 ```
 
 **Get Body**
@@ -117,7 +117,7 @@ Prepend a value to a message [*Header*](https://github.com/elusivecodes/FyreHead
 - `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
-$message->prependHeader($name, $value);
+$newMessage = $message->prependHeader($name, $value);
 ```
 
 **Remove Header**
@@ -127,7 +127,7 @@ Remove a [*Header*](https://github.com/elusivecodes/FyreHeader).
 - `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 
 ```php
-$message->removeHeader($name);
+$newMessage = $message->removeHeader($name);
 ```
 
 **Set Body**
@@ -137,7 +137,7 @@ Set the message body.
 - `$data` is a string representing the message body.
 
 ```php
-$message->setBody($data);
+$newMessage = $message->setBody($data);
 ```
 
 **Set Header**
@@ -148,7 +148,7 @@ Set a message [*Header*](https://github.com/elusivecodes/FyreHeader).
 - `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
 
 ```php
-$message->setHeader($name, $value);
+$newMessage = $message->setHeader($name, $value);
 ```
 
 **Set Protocol Version**
@@ -158,5 +158,5 @@ Set the protocol version.
 - `$version` is a string representing the protocol version.
 
 ```php
-$message->setProtocolVersion($version);
+$newMessage = $message->setProtocolVersion($version);
 ```

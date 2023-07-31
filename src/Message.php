@@ -29,7 +29,7 @@ class Message
     /**
      * Append data to the message body.
      * @param string $data The data to append.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function appendBody(string $data): static
     {
@@ -44,7 +44,7 @@ class Message
      * Append a value to a message header.
      * @param string $name The header name.
      * @param string $value The header value.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function appendHeader(string $name, string $value): static
     {
@@ -121,7 +121,7 @@ class Message
      * Prepend a value to a message header.
      * @param string $name The header name.
      * @param string $value The header value.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function prependHeader(string $name, string $value): static
     {
@@ -136,7 +136,7 @@ class Message
     /**
      * Remove a header.
      * @param string $name The header name.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function removeHeader(string $name): static
     {
@@ -150,7 +150,7 @@ class Message
     /**
      * Set the message body.
      * @param string $data The message body.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function setBody(string $data): static
     {
@@ -165,7 +165,7 @@ class Message
      * Set a message header.
      * @param string $name The header name.
      * @param string|array $value The header value.
-     * @return Message The new Message.
+     * @return Message A new Message.
      */
     public function setHeader(string $name, string|array $value): static
     {
@@ -180,7 +180,7 @@ class Message
     /**
      * Set the protocol version.
      * @param string $version The protocol version.
-     * @return Message The new Message.
+     * @return Message A new Message.
      * @throws InvalidArgumentException if the protocol version is not valid.
      */
     public function setProtocolVersion(string $version): static

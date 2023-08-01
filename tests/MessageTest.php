@@ -13,6 +13,34 @@ final class MessageTest extends TestCase
 
     protected Message $message;
 
+    public function testConstructor(): void
+    {
+        $message = new Message([
+            'body' => 'test',
+            'headers' => [
+                'test' => 'value'
+            ],
+            'protocolVersion' => '2.0'
+        ]);
+
+        $this->assertSame(
+            'test',
+            $message->getBody()
+        );
+
+        $this->assertSame(
+            [
+                'value'
+            ],
+            $message->getHeader('test')->getValue()
+        );
+
+        $this->assertSame(
+            '2.0',
+            $message->getProtocolVersion()
+        );
+    }
+
     public function testAppendBody(): void
     {
         $message1 = new Message();
@@ -161,6 +189,15 @@ final class MessageTest extends TestCase
         $this->assertSame(
             'a=1, b=2',
             $message2->getHeaderValue('test')
+        );
+    }
+
+    public function testGetHeaderValueInvalid(): void
+    {
+        $message = new Message();
+
+        $this->assertNull(
+            $message->getHeaderValue('test')
         );
     }
 

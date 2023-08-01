@@ -27,6 +27,25 @@ class Message
     protected string $body = '';
 
     /**
+     * New Message constructor.
+     * @param array $options The message options.
+     */
+    public function __construct(array $options = [])
+    {
+        $options['body'] ??= '';
+        $options['headers'] ??= [];
+        $options['protocolVersion'] ??= '1.1';
+
+        $this->body = $options['body'];
+
+        foreach ($options['headers'] AS $name => $value) {
+            $this->headers[$name] = new Header($name, $value);
+        }
+
+        $this->protocolVersion = static::filterProtocolVersion($options['protocolVersion']);
+    }
+
+    /**
      * Append data to the message body.
      * @param string $data The data to append.
      * @return Message A new Message.
@@ -87,12 +106,12 @@ class Message
     /**
      * Get a message header value.
      * @param string $name The header name.
-     * @return string The header value string.
+     * @return string|null The header value string.
      */
-    public function getHeaderValue(string $name): string
+    public function getHeaderValue(string $name): string|null
     {
-        if (!$this->hasHeader($name)) {
-            return '';
+        if (!array_key_exists($name, $this->headers)) {
+            return null;
         }
 
         return $this->getHeader($name)->getValueString();
@@ -171,8 +190,7 @@ class Message
     {
         $temp = clone $this;
 
-        $header = $temp->headers[$name] ?? new Header($name);
-        $temp->headers[$name] = $header->setValue($value);
+        $temp->headers[$name] = new Header($name, $value);
 
         return $temp;
     }
@@ -181,19 +199,29 @@ class Message
      * Set the protocol version.
      * @param string $version The protocol version.
      * @return Message A new Message.
-     * @throws InvalidArgumentException if the protocol version is not valid.
      */
     public function setProtocolVersion(string $version): static
+    {
+        $temp = clone $this;
+
+        $temp->protocolVersion = static::filterProtocolVersion($version);
+
+        return $temp;
+    }
+
+    /**
+     * Filter the protocol version.
+     * @param string $version The protocol version.
+     * @return string The filtered protcol version.
+     * @throws InvalidArgumentException if the protocol version is not valid.
+     */
+    protected static function filterProtocolVersion(string $version): string
     {
         if (!in_array($version, static::VALID_PROTOCOLS)) {
             throw new InvalidArgumentException('Invalid protocol version: '.$version);
         }
 
-        $temp = clone $this;
-
-        $temp->protocolVersion = $version;
-
-        return $temp;
+        return $version;
     }
 
 }

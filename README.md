@@ -27,8 +27,13 @@ use Fyre\Http\Message;
 
 ## Message Creation
 
+- `$options` is an array containing the message options.
+    - `body` is a string representing the message body, and will default to "".
+    - `headers` is an array containing headers to set, and will default to *[]*.
+    - `protocolVersion` is a string representing the protocol version, and will default to "*1.1*".
+
 ```php
-$message = new Message();
+$message = new Message($options);
 ```
 
 

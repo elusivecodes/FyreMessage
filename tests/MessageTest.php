@@ -10,36 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase
 {
-
     protected Message $message;
-
-    public function testConstructor(): void
-    {
-        $message = new Message([
-            'body' => 'test',
-            'headers' => [
-                'test' => 'value'
-            ],
-            'protocolVersion' => '2.0'
-        ]);
-
-        $this->assertSame(
-            'test',
-            $message->getBody()
-        );
-
-        $this->assertSame(
-            [
-                'value'
-            ],
-            $message->getHeader('test')->getValue()
-        );
-
-        $this->assertSame(
-            '2.0',
-            $message->getProtocolVersion()
-        );
-    }
 
     public function testAppendBody(): void
     {
@@ -80,23 +51,6 @@ final class MessageTest extends TestCase
         );
     }
 
-    public function testAppendHeaderNew(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->appendHeader('test', 'last');
-
-        $this->assertFalse(
-            $message1->hasHeader('test')
-        );
-
-        $this->assertSame(
-            [
-                'last'
-            ],
-            $message2->getHeader('test')->getValue()
-        );
-    }
-
     public function testAppendHeaderEmpty(): void
     {
         $message1 = new Message();
@@ -118,12 +72,47 @@ final class MessageTest extends TestCase
         );
     }
 
-    public function testGetProtocolVersionDefault(): void
+    public function testAppendHeaderNew(): void
     {
-        $message = new Message();
+        $message1 = new Message();
+        $message2 = $message1->appendHeader('test', 'last');
+
+        $this->assertFalse(
+            $message1->hasHeader('test')
+        );
 
         $this->assertSame(
-            '1.1',
+            [
+                'last'
+            ],
+            $message2->getHeader('test')->getValue()
+        );
+    }
+
+    public function testConstructor(): void
+    {
+        $message = new Message([
+            'body' => 'test',
+            'headers' => [
+                'test' => 'value'
+            ],
+            'protocolVersion' => '2.0'
+        ]);
+
+        $this->assertSame(
+            'test',
+            $message->getBody()
+        );
+
+        $this->assertSame(
+            [
+                'value'
+            ],
+            $message->getHeader('test')->getValue()
+        );
+
+        $this->assertSame(
+            '2.0',
             $message->getProtocolVersion()
         );
     }
@@ -201,6 +190,16 @@ final class MessageTest extends TestCase
         );
     }
 
+    public function testGetProtocolVersionDefault(): void
+    {
+        $message = new Message();
+
+        $this->assertSame(
+            '1.1',
+            $message->getProtocolVersion()
+        );
+    }
+
     public function testHasHeaderTrue(): void
     {
         $message1 = new Message();
@@ -243,19 +242,6 @@ final class MessageTest extends TestCase
         );
     }
 
-    public function testPrependHeaderNew(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->prependHeader('test', 'first');
-
-        $this->assertSame(
-            [
-                'first'
-            ],
-            $message2->getHeader('test')->getValue()
-        );
-    }
-
     public function testPrependHeaderEmpty(): void
     {
         $message1 = new Message();
@@ -274,6 +260,19 @@ final class MessageTest extends TestCase
                 'value'
             ],
             $message3->getHeader('test')->getValue()
+        );
+    }
+
+    public function testPrependHeaderNew(): void
+    {
+        $message1 = new Message();
+        $message2 = $message1->prependHeader('test', 'first');
+
+        $this->assertSame(
+            [
+                'first'
+            ],
+            $message2->getHeader('test')->getValue()
         );
     }
 
@@ -359,5 +358,4 @@ final class MessageTest extends TestCase
         $message = new Message();
         $message->setProtocolVersion('2.1');
     }
-
 }

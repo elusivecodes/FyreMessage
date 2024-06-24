@@ -13,18 +13,15 @@ use function in_array;
  */
 class Message
 {
-
     protected const VALID_PROTOCOLS = [
         '1.0',
         '1.1',
         '2.0',
     ];
 
-    protected string $protocolVersion = '1.1';
-
-    protected array $headers = [];
-
     protected string $body = '';
+    protected array $headers = [];
+    protected string $protocolVersion = '1.1';
 
     /**
      * New Message constructor.
@@ -38,7 +35,7 @@ class Message
 
         $this->body = $options['body'];
 
-        foreach ($options['headers'] AS $name => $value) {
+        foreach ($options['headers'] as $name => $value) {
             $this->headers[$name] = new Header($name, $value);
         }
 
@@ -186,7 +183,7 @@ class Message
      * @param string|array $value The header value.
      * @return Message A new Message.
      */
-    public function setHeader(string $name, string|array $value): static
+    public function setHeader(string $name, array|string $value): static
     {
         $temp = clone $this;
 
@@ -223,5 +220,4 @@ class Message
 
         return $version;
     }
-
 }

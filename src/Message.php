@@ -20,11 +20,14 @@ class Message
     ];
 
     protected string $body = '';
+
     protected array $headers = [];
+
     protected string $protocolVersion = '1.1';
 
     /**
      * New Message constructor.
+     *
      * @param array $options The message options.
      */
     public function __construct(array $options = [])
@@ -44,6 +47,7 @@ class Message
 
     /**
      * Append data to the message body.
+     *
      * @param string $data The data to append.
      * @return Message A new Message.
      */
@@ -58,6 +62,7 @@ class Message
 
     /**
      * Append a value to a message header.
+     *
      * @param string $name The header name.
      * @param string $value The header value.
      * @return Message A new Message.
@@ -74,6 +79,7 @@ class Message
 
     /**
      * Get the message body.
+     *
      * @return string The message body.
      */
     public function getBody(): string
@@ -83,6 +89,7 @@ class Message
 
     /**
      * Get a message header.
+     *
      * @param string $name The header name.
      * @return Header|null The Header, or null if it does not exist.
      */
@@ -93,6 +100,7 @@ class Message
 
     /**
      * Get the message headers.
+     *
      * @return array The message headers.
      */
     public function getHeaders(): array
@@ -102,6 +110,7 @@ class Message
 
     /**
      * Get a message header value.
+     *
      * @param string $name The header name.
      * @return string|null The header value string.
      */
@@ -116,6 +125,7 @@ class Message
 
     /**
      * Get the protocol version.
+     *
      * @return string The protocol version.
      */
     public function getProtocolVersion(): string
@@ -125,6 +135,7 @@ class Message
 
     /**
      * Determine if the message has a header.
+     *
      * @param string $name The header name.
      * @return bool TRUE if the message has the header, otherwise FALSE.
      */
@@ -135,6 +146,7 @@ class Message
 
     /**
      * Prepend a value to a message header.
+     *
      * @param string $name The header name.
      * @param string $value The header value.
      * @return Message A new Message.
@@ -151,6 +163,7 @@ class Message
 
     /**
      * Remove a header.
+     *
      * @param string $name The header name.
      * @return Message A new Message.
      */
@@ -165,6 +178,7 @@ class Message
 
     /**
      * Set the message body.
+     *
      * @param string $data The message body.
      * @return Message A new Message.
      */
@@ -179,6 +193,7 @@ class Message
 
     /**
      * Set a message header.
+     *
      * @param string $name The header name.
      * @param string|array $value The header value.
      * @return Message A new Message.
@@ -194,6 +209,7 @@ class Message
 
     /**
      * Set the protocol version.
+     *
      * @param string $version The protocol version.
      * @return Message A new Message.
      */
@@ -208,8 +224,10 @@ class Message
 
     /**
      * Filter the protocol version.
+     *
      * @param string $version The protocol version.
      * @return string The filtered protcol version.
+     *
      * @throws InvalidArgumentException if the protocol version is not valid.
      */
     protected static function filterProtocolVersion(string $version): string

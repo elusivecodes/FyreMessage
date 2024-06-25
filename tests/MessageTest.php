@@ -37,7 +37,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message2->getHeader('test')->getValue()
         );
@@ -45,7 +45,7 @@ final class MessageTest extends TestCase
         $this->assertSame(
             [
                 'value',
-                'last'
+                'last',
             ],
             $message3->getHeader('test')->getValue()
         );
@@ -59,14 +59,14 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message2->getHeader('test')->getValue()
         );
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message3->getHeader('test')->getValue()
         );
@@ -83,7 +83,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'last'
+                'last',
             ],
             $message2->getHeader('test')->getValue()
         );
@@ -94,9 +94,9 @@ final class MessageTest extends TestCase
         $message = new Message([
             'body' => 'test',
             'headers' => [
-                'test' => 'value'
+                'test' => 'value',
             ],
-            'protocolVersion' => '2.0'
+            'protocolVersion' => '2.0',
         ]);
 
         $this->assertSame(
@@ -106,7 +106,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message->getHeader('test')->getValue()
         );
@@ -145,7 +145,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'test1' => $message2->getHeader('test1')
+                'test1' => $message2->getHeader('test1'),
             ],
             $message2->getHeaders()
         );
@@ -153,7 +153,7 @@ final class MessageTest extends TestCase
         $this->assertSame(
             [
                 'test1' => $message3->getHeader('test1'),
-                'test2' => $message3->getHeader('test2')
+                'test2' => $message3->getHeader('test2'),
             ],
             $message3->getHeaders()
         );
@@ -228,7 +228,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message2->getHeader('test')->getValue()
         );
@@ -236,7 +236,7 @@ final class MessageTest extends TestCase
         $this->assertSame(
             [
                 'first',
-                'value'
+                'value',
             ],
             $message3->getHeader('test')->getValue()
         );
@@ -250,14 +250,14 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message2->getHeader('test')->getValue()
         );
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message3->getHeader('test')->getValue()
         );
@@ -270,7 +270,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'first'
+                'first',
             ],
             $message2->getHeader('test')->getValue()
         );
@@ -309,7 +309,7 @@ final class MessageTest extends TestCase
 
         $this->assertSame(
             [
-                'value'
+                'value',
             ],
             $message2->getHeader('test')->getValue()
         );
@@ -323,7 +323,7 @@ final class MessageTest extends TestCase
         $this->assertSame(
             [
                 'first',
-                'last'
+                'last',
             ],
             $message2->getHeader('test')->getValue()
         );

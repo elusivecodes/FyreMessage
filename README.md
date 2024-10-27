@@ -6,7 +6,7 @@
 ## Table Of Contents
 - [Installation](#installation)
 - [Message Creation](#message-creation)
-- [Methods](#methods)
+- [Message Methods](#message-methods)
 
 
 
@@ -37,7 +37,7 @@ $message = new Message($options);
 ```
 
 
-## Methods
+## Message Methods
 
 **Append Body**
 
@@ -106,7 +106,7 @@ $version = $message->getProtocolVersion();
 
 **Has Header**
 
-Determine if the message has a [*Header*](https://github.com/elusivecodes/FyreHeader).
+Determine whether the message has a [*Header*](https://github.com/elusivecodes/FyreHeader).
 
 - `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
 

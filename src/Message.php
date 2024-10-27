@@ -134,7 +134,7 @@ class Message
     }
 
     /**
-     * Determine if the message has a header.
+     * Determine whether the message has a header.
      *
      * @param string $name The header name.
      * @return bool TRUE if the message has the header, otherwise FALSE.

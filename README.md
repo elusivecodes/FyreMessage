@@ -5,8 +5,8 @@
 
 ## Table Of Contents
 - [Installation](#installation)
-- [Message Creation](#message-creation)
-- [Message Methods](#message-methods)
+- [Basic Usage](#basic-usage)
+- [Methods](#methods)
 
 
 
@@ -25,7 +25,7 @@ use Fyre\Http\Message;
 ```
 
 
-## Message Creation
+## Basic Usage
 
 - `$options` is an array containing the message options.
     - `body` is a string representing the message body, and will default to "".
@@ -37,7 +37,7 @@ $message = new Message($options);
 ```
 
 
-## Message Methods
+## Methods
 
 **Append Body**
 

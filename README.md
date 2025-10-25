@@ -49,12 +49,12 @@ $stream = $message->getBody();
 
 **Get Header**
 
-Get a message header.
+Get the values of message header.
 
 - `$name` is a string representing the header name.
 
 ```php
-$header = $message->getHeader($name);
+$values = $message->getHeader($name);
 ```
 
 **Get Header Line**

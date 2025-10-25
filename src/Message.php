@@ -3,15 +3,27 @@ declare(strict_types=1);
 
 namespace Fyre\Http;
 
-use InvalidArgumentException;
+use Fyre\Http\Exceptions\MessageException;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\StreamInterface;
+use Stringable;
 
+use function array_combine;
 use function array_key_exists;
+use function array_map;
+use function gettype;
+use function implode;
 use function in_array;
+use function is_numeric;
+use function is_string;
+use function preg_match;
+use function strtolower;
+use function trim;
 
 /**
  * Message
  */
-class Message
+class Message implements MessageInterface
 {
     protected const VALID_PROTOCOLS = [
         '1.0',
@@ -19,7 +31,9 @@ class Message
         '2.0',
     ];
 
-    protected string $body = '';
+    protected StreamInterface $body;
+
+    protected array $headerNames = [];
 
     protected array $headers = [];
 
@@ -36,66 +50,64 @@ class Message
         $options['headers'] ??= [];
         $options['protocolVersion'] ??= '1.1';
 
-        $this->body = $options['body'];
+        if (is_string($options['body'])) {
+            $options['body'] = Stream::createFromString($options['body']);
+        }
+
+        if ($options['body'] instanceof StreamInterface) {
+            $this->body = $options['body'];
+        } else if (is_string($options['body']) || $options['body'] instanceof Stringable) {
+            $this->body = Stream::createFromString((string) $options['body']);
+        } else {
+            throw MessageException::forInvalidBodyType(gettype($options['body']));
+        }
 
         foreach ($options['headers'] as $name => $value) {
-            $this->headers[$name] = new Header($name, $value);
+            $filteredName = static::filterHeaderName($name);
+
+            $this->headerNames[$filteredName] = $name;
+            $this->headers[$filteredName] = static::filterHeaderValue($value);
         }
 
         $this->protocolVersion = static::filterProtocolVersion($options['protocolVersion']);
     }
 
     /**
-     * Append data to the message body.
-     *
-     * @param string $data The data to append.
-     * @return Message A new Message.
-     */
-    public function appendBody(string $data): static
-    {
-        $temp = clone $this;
-
-        $temp->body .= $data;
-
-        return $temp;
-    }
-
-    /**
-     * Append a value to a message header.
-     *
-     * @param string $name The header name.
-     * @param string $value The header value.
-     * @return Message A new Message.
-     */
-    public function appendHeader(string $name, string $value): static
-    {
-        $temp = clone $this;
-
-        $header = $temp->headers[$name] ?? new Header($name);
-        $temp->headers[$name] = $header->appendValue($value);
-
-        return $temp;
-    }
-
-    /**
      * Get the message body.
      *
-     * @return string The message body.
+     * @return StreamInterface The message body.
      */
-    public function getBody(): string
+    public function getBody(): StreamInterface
     {
         return $this->body;
     }
 
     /**
-     * Get a message header.
+     * Get the values of message header.
      *
      * @param string $name The header name.
-     * @return Header|null The Header, or null if it does not exist.
+     * @return array The header values.
      */
-    public function getHeader(string $name): Header|null
+    public function getHeader(string $name): array
     {
-        return $this->headers[$name] ?? null;
+        $name = strtolower($name);
+
+        return $this->headers[$name] ?? [];
+    }
+
+    /**
+     * Get the value string of a message header.
+     *
+     * @param string $name The header name.
+     * @return string The header value string.
+     */
+    public function getHeaderLine(string $name): string
+    {
+        $name = strtolower($name);
+
+        $value = $this->headers[$name] ?? [];
+
+        return implode(', ', $value);
     }
 
     /**
@@ -105,22 +117,12 @@ class Message
      */
     public function getHeaders(): array
     {
-        return $this->headers;
-    }
+        $headerNames = array_map(
+            fn(string $name): string => $this->headerNames[$name],
+            array_keys($this->headers)
+        );
 
-    /**
-     * Get a message header value.
-     *
-     * @param string $name The header name.
-     * @return string|null The header value string.
-     */
-    public function getHeaderValue(string $name): string|null
-    {
-        if (!array_key_exists($name, $this->headers)) {
-            return null;
-        }
-
-        return $this->getHeader($name)->getValueString();
+        return array_combine($headerNames, $this->headers);
     }
 
     /**
@@ -141,79 +143,95 @@ class Message
      */
     public function hasHeader(string $name): bool
     {
+        $name = strtolower($name);
+
         return array_key_exists($name, $this->headers);
     }
 
     /**
-     * Prepend a value to a message header.
+     * Clone the Message with new value(s) added to a header.
      *
      * @param string $name The header name.
-     * @param string $value The header value.
+     * @param mixed $value The header value.
      * @return Message A new Message.
      */
-    public function prependHeader(string $name, string $value): static
+    public function withAddedHeader(string $name, mixed $value): static
     {
+        $name = strtolower($name);
+
+        if (!array_key_exists($name, $this->headers)) {
+            return $this->withHeader($name, $value);
+        }
+
         $temp = clone $this;
 
-        $header = $temp->headers[$name] ?? new Header($name);
-        $temp->headers[$name] = $header->prependValue($value);
+        $temp->headers[$name] = [
+            ...$temp->headers[$name],
+            ...static::filterHeaderValue($value),
+        ];
 
         return $temp;
     }
 
     /**
-     * Remove a header.
+     * Clone the Message with a new body.
+     *
+     * @param StreamInterface $body The message body.
+     * @return Message A new Message.
+     */
+    public function withBody(StreamInterface $body): static
+    {
+        $temp = clone $this;
+
+        $temp->body = $body;
+
+        return $temp;
+    }
+
+    /**
+     * Clone the Message with a new header.
+     *
+     * @param string $name The header name.
+     * @param mixed $value The header value.
+     * @return Message A new Message.
+     */
+    public function withHeader(string $name, mixed $value): static
+    {
+        $temp = clone $this;
+
+        $filteredName = static::filterHeaderName($name);
+
+        $temp->headerNames[$filteredName] = $name;
+        $temp->headers[$filteredName] = static::filterHeaderValue($value);
+
+        return $temp;
+    }
+
+    /**
+     * Clone the Message without a header.
      *
      * @param string $name The header name.
      * @return Message A new Message.
      */
-    public function removeHeader(string $name): static
+    public function withoutHeader(string $name): static
     {
         $temp = clone $this;
 
+        $name = strtolower($name);
+
+        unset($temp->headerNames[$name]);
         unset($temp->headers[$name]);
 
         return $temp;
     }
 
     /**
-     * Set the message body.
-     *
-     * @param string $data The message body.
-     * @return Message A new Message.
-     */
-    public function setBody(string $data): static
-    {
-        $temp = clone $this;
-
-        $temp->body = $data;
-
-        return $temp;
-    }
-
-    /**
-     * Set a message header.
-     *
-     * @param string $name The header name.
-     * @param array|string $value The header value.
-     * @return Message A new Message.
-     */
-    public function setHeader(string $name, array|string $value): static
-    {
-        $temp = clone $this;
-
-        $temp->headers[$name] = new Header($name, $value);
-
-        return $temp;
-    }
-
-    /**
-     * Set the protocol version.
+     * Clone the Message with a new protocol version.
      *
      * @param string $version The protocol version.
      * @return Message A new Message.
      */
-    public function setProtocolVersion(string $version): static
+    public function withProtocolVersion(string $version): static
     {
         $temp = clone $this;
 
@@ -223,17 +241,70 @@ class Message
     }
 
     /**
+     * Filter a header name.
+     *
+     * @param string $name The header name.
+     * @return string The filtered header name.
+     *
+     * @throws MessageException if the header name is not valid.
+     */
+    protected static function filterHeaderName(string $name): string
+    {
+        if (!preg_match('/^[!#$%&\'*+\-.^_`|~0-9A-Za-z]+$/', $name)) {
+            throw MessageException::forInvalidHeaderName($name);
+        }
+
+        return strtolower($name);
+    }
+
+    /**
+     * Filter a header value.
+     *
+     * @param mixed $value The header value.
+     * @return array The filtered header value(s).
+     *
+     * @throws MessageException if the header value is not valid.
+     */
+    protected static function filterHeaderValue(mixed $value): array
+    {
+        $values = (array) $value;
+
+        if ($values === []) {
+            throw MessageException::forEmptyHeaderValue();
+        }
+
+        $values = array_map(
+            static function(mixed $value): string {
+                if (!is_string($value) && !is_numeric($value)) {
+                    throw MessageException::forInvalidHeaderValueType(gettype($value));
+                }
+
+                $value = (string) $value;
+
+                if (preg_match('/[^\x09\x20-\x7E]/', $value)) {
+                    throw MessageException::forInvalidHeaderValue($value);
+                }
+
+                return trim($value, " \t");
+            },
+            $values
+        );
+
+        return $values;
+    }
+
+    /**
      * Filter the protocol version.
      *
      * @param string $version The protocol version.
      * @return string The filtered protcol version.
      *
-     * @throws InvalidArgumentException if the protocol version is not valid.
+     * @throws MessageException if the protocol version is not valid.
      */
     protected static function filterProtocolVersion(string $version): string
     {
         if (!in_array($version, static::VALID_PROTOCOLS)) {
-            throw new InvalidArgumentException('Invalid protocol version: '.$version);
+            throw MessageException::forInvalidProtocolVersion($version);
         }
 
         return $version;

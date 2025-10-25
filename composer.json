@@ -20,7 +20,8 @@
         }
     },
     "require": {
-        "fyre/header": "^2.0"
+        "fyre/stream": "^4.0",
+        "psr/http-message": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",

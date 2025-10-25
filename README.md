@@ -28,7 +28,7 @@ use Fyre\Http\Message;
 ## Basic Usage
 
 - `$options` is an array containing the message options.
-    - `body` is a string representing the message body, and will default to "".
+    - `body` is a *StreamInterface* or string representing the message body, and will default to "".
     - `headers` is an array containing headers to set, and will default to *[]*.
     - `protocolVersion` is a string representing the protocol version, and will default to "*1.1*".
 
@@ -39,43 +39,32 @@ $message = new Message($options);
 
 ## Methods
 
-**Append Body**
-
-Append data to the message body.
-
-- `$data` is a string representing the data to append.
-
-```php
-$newMessage = $message->appendBody($data);
-```
-
-**Append Header**
-
-Append a value to a message [*Header*](https://github.com/elusivecodes/FyreHeader).
-
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
-- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
-
-```php
-$newMessage = $message->appendHeader($name, $value);
-```
-
 **Get Body**
 
 Get the message body.
 
 ```php
-$body = $message->getBody();
+$stream = $message->getBody();
 ```
 
 **Get Header**
 
-Get a message [*Header*](https://github.com/elusivecodes/FyreHeader).
+Get a message header.
 
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$name` is a string representing the header name.
 
 ```php
 $header = $message->getHeader($name);
+```
+
+**Get Header Line**
+
+Get the value string of a message header.
+
+- `$name` is a string representing the header name.
+
+```php
+$value = $message->getHeaderValue($name);
 ```
 
 **Get Headers**
@@ -84,16 +73,6 @@ Get the message headers.
 
 ```php
 $headers = $message->getHeaders();
-```
-
-**Get Header Value**
-
-Get a message [*Header*](https://github.com/elusivecodes/FyreHeader) value.
-
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
-
-```php
-$value = $message->getHeaderValue($name);
 ```
 
 **Get Protocol Version**
@@ -106,62 +85,62 @@ $version = $message->getProtocolVersion();
 
 **Has Header**
 
-Determine whether the message has a [*Header*](https://github.com/elusivecodes/FyreHeader).
+Determine whether the message has a header.
 
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$name` is a string representing the header name.
 
 ```php
 $hasHeader = $message->hasHeader($name);
 ```
 
-**Prepend Header**
+**With Added Header**
 
-Prepend a value to a message [*Header*](https://github.com/elusivecodes/FyreHeader).
+Clone the *Message* with new value(s) added to a header.
 
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
-- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
-
-```php
-$newMessage = $message->prependHeader($name, $value);
-```
-
-**Remove Header**
-
-Remove a [*Header*](https://github.com/elusivecodes/FyreHeader).
-
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
+- `$name` is a string representing the header name.
+- `$value` is a string or array representing the header value.
 
 ```php
-$newMessage = $message->removeHeader($name);
+$newMessage = $message->withAddedHeader($name, $value);
 ```
 
-**Set Body**
+**With Body**
 
-Set the message body.
+Clone the *Message* with a new body.
 
-- `$data` is a string representing the message body.
+- `$stream` is a *StreamInterface* representing the message body.
 
 ```php
-$newMessage = $message->setBody($data);
+$newMessage = $message->withBody($stream);
 ```
 
-**Set Header**
+**With Header**
 
-Set a message [*Header*](https://github.com/elusivecodes/FyreHeader).
+Clone the *Message* with a new header.
 
-- `$name` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) name.
-- `$value` is a string representing the [*Header*](https://github.com/elusivecodes/FyreHeader) value.
+- `$name` is a string representing the header name.
+- `$value` is a string or array representing the header value.
 
 ```php
-$newMessage = $message->setHeader($name, $value);
+$newMessage = $message->withHeader($name, $value);
 ```
 
-**Set Protocol Version**
+**Without Header**
 
-Set the protocol version.
+Clone the *Message* without a header.
+
+- `$name` is a string representing the header name.
+
+```php
+$newMessage = $message->withoutHeader($name);
+```
+
+**With Protocol Version**
+
+Clone the *Message* with a new protocol version.
 
 - `$version` is a string representing the protocol version.
 
 ```php
-$newMessage = $message->setProtocolVersion($version);
+$newMessage = $message->withProtocolVersion($version);
 ```

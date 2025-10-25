@@ -3,91 +3,14 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Fyre\Http\Header;
+use Fyre\Http\Exceptions\MessageException;
 use Fyre\Http\Message;
-use InvalidArgumentException;
+use Fyre\Http\Stream;
 use PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase
 {
     protected Message $message;
-
-    public function testAppendBody(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setBody('test');
-        $message3 = $message2->appendBody('1');
-
-        $this->assertSame(
-            'test',
-            $message2->getBody()
-        );
-
-        $this->assertSame(
-            'test1',
-            $message3->getBody()
-        );
-    }
-
-    public function testAppendHeader(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-        $message3 = $message2->appendHeader('test', 'last');
-
-        $this->assertSame(
-            [
-                'value',
-            ],
-            $message2->getHeader('test')->getValue()
-        );
-
-        $this->assertSame(
-            [
-                'value',
-                'last',
-            ],
-            $message3->getHeader('test')->getValue()
-        );
-    }
-
-    public function testAppendHeaderEmpty(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-        $message3 = $message2->appendHeader('test', '');
-
-        $this->assertSame(
-            [
-                'value',
-            ],
-            $message2->getHeader('test')->getValue()
-        );
-
-        $this->assertSame(
-            [
-                'value',
-            ],
-            $message3->getHeader('test')->getValue()
-        );
-    }
-
-    public function testAppendHeaderNew(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->appendHeader('test', 'last');
-
-        $this->assertFalse(
-            $message1->hasHeader('test')
-        );
-
-        $this->assertSame(
-            [
-                'last',
-            ],
-            $message2->getHeader('test')->getValue()
-        );
-    }
 
     public function testConstructor(): void
     {
@@ -99,16 +22,23 @@ final class MessageTest extends TestCase
             'protocolVersion' => '2.0',
         ]);
 
+        $body = $message->getBody();
+
+        $this->assertInstanceOf(
+            Stream::class,
+            $body
+        );
+
         $this->assertSame(
             'test',
-            $message->getBody()
+            $body->getContents()
         );
 
         $this->assertSame(
             [
                 'value',
             ],
-            $message->getHeader('test')->getValue()
+            $message->getHeader('test')
         );
 
         $this->assertSame(
@@ -119,12 +49,17 @@ final class MessageTest extends TestCase
 
     public function testGetHeader(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
+        $message = new Message([
+            'headers' => [
+                'test' => 'value',
+            ],
+        ]);
 
-        $this->assertInstanceOf(
-            Header::class,
-            $message2->getHeader('test')
+        $this->assertSame(
+            [
+                'value',
+            ],
+            $message->getHeader('test')
         );
     }
 
@@ -132,61 +67,69 @@ final class MessageTest extends TestCase
     {
         $message = new Message();
 
-        $this->assertNull(
+        $this->assertSame(
+            [],
             $message->getHeader('invalid')
+        );
+    }
+
+    public function testGetHeaderLine(): void
+    {
+        $message = new Message([
+            'headers' => [
+                'test' => 'value',
+            ],
+        ]);
+
+        $this->assertSame(
+            'value',
+            $message->getHeaderLine('test')
+        );
+    }
+
+    public function testGetHeaderLineInvalid(): void
+    {
+        $message = new Message();
+
+        $this->assertSame(
+            '',
+            $message->getHeaderLine('test')
+        );
+    }
+
+    public function testGetHeaderLineMultiple(): void
+    {
+        $message = new Message([
+            'headers' => [
+                'test' => ['value1', 'value2'],
+            ],
+        ]);
+
+        $this->assertSame(
+            'value1, value2',
+            $message->getHeaderLine('test')
         );
     }
 
     public function testGetHeaders(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test1', 'value');
-        $message3 = $message2->setHeader('test2', 'value');
+        $message = new Message([
+            'headers' => [
+                'test1' => 'value',
+                'test2' => 'value',
+            ],
+        ]);
 
         $this->assertSame(
             [
-                'test1' => $message2->getHeader('test1'),
+                'test1' => [
+                    'value',
+                ],
+                'test2' => [
+                    'value',
+                ],
             ],
-            $message2->getHeaders()
-        );
-
-        $this->assertSame(
-            [
-                'test1' => $message3->getHeader('test1'),
-                'test2' => $message3->getHeader('test2'),
-            ],
-            $message3->getHeaders()
-        );
-    }
-
-    public function testGetHeaderValue(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-
-        $this->assertSame(
-            'value',
-            $message2->getHeaderValue('test')
-        );
-    }
-
-    public function testGetHeaderValueAssociative(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', ['a' => 1, 'b' => 2]);
-
-        $this->assertSame(
-            'a=1, b=2',
-            $message2->getHeaderValue('test')
-        );
-    }
-
-    public function testGetHeaderValueInvalid(): void
-    {
-        $message = new Message();
-
-        $this->assertNull(
-            $message->getHeaderValue('test')
+            $message->getHeaders()
         );
     }
 
@@ -202,148 +145,206 @@ final class MessageTest extends TestCase
 
     public function testHasHeaderTrue(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
+        $message = new Message([
+            'headers' => [
+                'test' => 'value',
+            ],
+        ]);
 
         $this->assertTrue(
-            $message2->hasHeader('test')
+            $message->hasHeader('test')
         );
     }
 
     public function testHasHeaderTrueFalse(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
+        $message = new Message();
 
         $this->assertFalse(
-            $message2->hasHeader('invalid')
+            $message->hasHeader('invalid')
         );
     }
 
-    public function testPrependHeader(): void
+    public function testWithAddedHeader(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-        $message3 = $message2->prependHeader('test', 'first');
-
-        $this->assertSame(
-            [
-                'value',
+        $message1 = new Message([
+            'headers' => [
+                'test' => 'value',
             ],
-            $message2->getHeader('test')->getValue()
-        );
+        ]);
+        $message2 = $message1->withAddedHeader('test', 'other');
 
-        $this->assertSame(
-            [
-                'first',
-                'value',
-            ],
-            $message3->getHeader('test')->getValue()
-        );
-    }
-
-    public function testPrependHeaderEmpty(): void
-    {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-        $message3 = $message2->prependHeader('test', '');
-
-        $this->assertSame(
-            [
-                'value',
-            ],
-            $message2->getHeader('test')->getValue()
+        $this->assertNotSame(
+            $message1,
+            $message2
         );
 
         $this->assertSame(
             [
                 'value',
+                'other',
             ],
-            $message3->getHeader('test')->getValue()
+            $message2->getHeader('test')
         );
     }
 
-    public function testPrependHeaderNew(): void
+    public function testWithAddedHeaderEmpty(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->prependHeader('test', 'first');
+        $this->expectException(MessageException::class);
 
-        $this->assertSame(
-            [
-                'first',
+        $message1 = new Message([
+            'headers' => [
+                'test' => 'value',
             ],
-            $message2->getHeader('test')->getValue()
-        );
+        ]);
+        $message1->withAddedHeader('test', []);
     }
 
-    public function testRemoveHeader(): void
+    public function testWithAddedHeaderInvalidValue(): void
+    {
+        $this->expectException(MessageException::class);
+
+        $message1 = new Message([
+            'headers' => [
+                'test' => 'value',
+            ],
+        ]);
+        $message1->withAddedHeader('test', "\x00");
+    }
+
+    public function testWithAddedHeaderNew(): void
     {
         $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
-        $message3 = $message2->removeHeader('test');
-
-        $this->assertTrue(
-            $message2->hasHeader('test')
-        );
+        $message2 = $message1->withAddedHeader('test', 'other');
 
         $this->assertFalse(
-            $message3->hasHeader('test')
+            $message1->hasHeader('test')
+        );
+
+        $this->assertSame(
+            [
+                'other',
+            ],
+            $message2->getHeader('test')
         );
     }
 
-    public function testSetBody(): void
+    public function testWithBody(): void
     {
         $message1 = new Message();
-        $message2 = $message1->setBody('test');
+        $message2 = $message1->withBody(Stream::createFromString('test'));
+
+        $this->assertNotSame(
+            $message1,
+            $message2
+        );
 
         $this->assertSame(
             'test',
-            $message2->getBody()
+            $message2->getBody()->getContents()
         );
     }
 
-    public function testSetHeader(): void
+    public function testWithHeader(): void
     {
-        $message1 = new Message();
-        $message2 = $message1->setHeader('test', 'value');
+        $message1 = new Message([
+            'headers' => [
+                'test' => 'value1',
+            ],
+        ]);
+        $message2 = $message1->withHeader('test', 'value2');
+
+        $this->assertNotSame(
+            $message1,
+            $message2
+        );
 
         $this->assertSame(
             [
-                'value',
+                'value2',
             ],
-            $message2->getHeader('test')->getValue()
+            $message2->getHeader('test')
         );
     }
 
-    public function testSetHeaderArray(): void
+    public function testWithHeaderArray(): void
     {
         $message1 = new Message();
-        $message2 = $message1->setHeader('test', ['first', 'last']);
+        $message2 = $message1->withHeader('test', ['first', 'other']);
 
         $this->assertSame(
             [
                 'first',
-                'last',
+                'other',
             ],
-            $message2->getHeader('test')->getValue()
+            $message2->getHeader('test')
         );
     }
 
-    public function testSetHeaderEmpty(): void
+    public function testWithHeaderEmpty(): void
     {
         $message1 = new Message();
-        $message2 = $message1->setHeader('test', '');
+        $message2 = $message1->withHeader('test', '');
 
         $this->assertSame(
-            [],
-            $message2->getHeader('test')->getValue()
+            [''],
+            $message2->getHeader('test')
         );
     }
 
-    public function testSetProtocolVersion(): void
+    public function testWithHeaderInvalidName(): void
+    {
+        $this->expectException(MessageException::class);
+
+        $message1 = new Message();
+        $message2 = $message1->withHeader('x:test', 'value');
+
+        $this->assertSame(
+            [''],
+            $message2->getHeader('test')
+        );
+    }
+
+    public function testWithHeaderInvalidValue(): void
+    {
+        $this->expectException(MessageException::class);
+
+        $message1 = new Message();
+        $message2 = $message1->withHeader('test', "\x00");
+
+        $this->assertSame(
+            [''],
+            $message2->getHeader('test')
+        );
+    }
+
+    public function testWithoutHeader(): void
+    {
+        $message1 = new Message([
+            'headers' => [
+                'test' => 'value',
+            ],
+        ]);
+        $message2 = $message1->withoutHeader('test');
+
+        $this->assertTrue(
+            $message1->hasHeader('test')
+        );
+
+        $this->assertFalse(
+            $message2->hasHeader('test')
+        );
+    }
+
+    public function testWithProtocolVersion(): void
     {
         $message1 = new Message();
-        $message2 = $message1->setProtocolVersion('2.0');
+        $message2 = $message1->withProtocolVersion('2.0');
+
+        $this->assertNotSame(
+            $message1,
+            $message2
+        );
 
         $this->assertSame(
             '2.0',
@@ -351,11 +352,11 @@ final class MessageTest extends TestCase
         );
     }
 
-    public function testSetProtocolVersionInvalid(): void
+    public function testWithProtocolVersionInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MessageException::class);
 
         $message = new Message();
-        $message->setProtocolVersion('2.1');
+        $message->withProtocolVersion('2.1');
     }
 }

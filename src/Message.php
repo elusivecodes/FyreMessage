@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\Http;
 
 use Fyre\Http\Exceptions\MessageException;
+use Override;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Stringable;
@@ -77,6 +78,7 @@ class Message implements MessageInterface
      *
      * @return StreamInterface The message body.
      */
+    #[Override]
     public function getBody(): StreamInterface
     {
         return $this->body;
@@ -88,6 +90,7 @@ class Message implements MessageInterface
      * @param string $name The header name.
      * @return array The header values.
      */
+    #[Override]
     public function getHeader(string $name): array
     {
         $name = strtolower($name);
@@ -101,6 +104,7 @@ class Message implements MessageInterface
      * @param string $name The header name.
      * @return string The header value string.
      */
+    #[Override]
     public function getHeaderLine(string $name): string
     {
         $name = strtolower($name);
@@ -115,6 +119,7 @@ class Message implements MessageInterface
      *
      * @return array The message headers.
      */
+    #[Override]
     public function getHeaders(): array
     {
         $headerNames = array_map(
@@ -130,6 +135,7 @@ class Message implements MessageInterface
      *
      * @return string The protocol version.
      */
+    #[Override]
     public function getProtocolVersion(): string
     {
         return $this->protocolVersion;
@@ -141,6 +147,7 @@ class Message implements MessageInterface
      * @param string $name The header name.
      * @return bool TRUE if the message has the header, otherwise FALSE.
      */
+    #[Override]
     public function hasHeader(string $name): bool
     {
         $name = strtolower($name);
@@ -155,6 +162,7 @@ class Message implements MessageInterface
      * @param mixed $value The header value.
      * @return Message A new Message.
      */
+    #[Override]
     public function withAddedHeader(string $name, mixed $value): static
     {
         $name = strtolower($name);
@@ -179,6 +187,7 @@ class Message implements MessageInterface
      * @param StreamInterface $body The message body.
      * @return Message A new Message.
      */
+    #[Override]
     public function withBody(StreamInterface $body): static
     {
         $temp = clone $this;
@@ -195,6 +204,7 @@ class Message implements MessageInterface
      * @param mixed $value The header value.
      * @return Message A new Message.
      */
+    #[Override]
     public function withHeader(string $name, mixed $value): static
     {
         $temp = clone $this;
@@ -213,6 +223,7 @@ class Message implements MessageInterface
      * @param string $name The header name.
      * @return Message A new Message.
      */
+    #[Override]
     public function withoutHeader(string $name): static
     {
         $temp = clone $this;
@@ -231,6 +242,7 @@ class Message implements MessageInterface
      * @param string $version The protocol version.
      * @return Message A new Message.
      */
+    #[Override]
     public function withProtocolVersion(string $version): static
     {
         $temp = clone $this;
